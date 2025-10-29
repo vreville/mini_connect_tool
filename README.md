@@ -14,7 +14,7 @@ cd mini_connect_tool
 pip install .
 ```
 
-## Developpers
+## Developers
 
 Victor Réville, Mikel Indurain, Matthieu Alexandre, Antoine Strugarek (spherical harmonics)
 
