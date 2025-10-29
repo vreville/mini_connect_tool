@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mini_connect_tool"
+version = "0.1.0"
+description = "A full python connectivity tool"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Victor Réville", email = "victor.reville@irap.omp.eu" }]
+requires-python = ">=3.10"
+dependencies = [
+         "speasy (>1.5.0)",
+         "sunpy (>=6.0.0, <7.0.0)",
+	 "spiceypy"
+	 
+]
+
+[project.urls]
+Homepage = "https://github.com/vreville/mini_connect_tool"
+
+[tool.setuptools.packages.find]
+where = ["."]
