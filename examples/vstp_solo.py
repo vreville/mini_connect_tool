@@ -1,6 +1,7 @@
 """ Compute the source points of Solar Orbiter
 for VSTP (very short term planning, some data may not be available) """
 
+import os
 import numpy as np
 import pandas as pd
 from mini_connect_tool import mini_connect_tool as mct
@@ -41,7 +42,7 @@ except:
     v_rtn_slo = pd.DataFrame({'Index':hours, 'vr':vr})
     v_rtn_slo = v_rtn_slo.set_index('Index')
 
-adapt_dir="../data/adapt_carrington/"
+adapt_dir=os.path.dirname(__file__)+"../data/adapt_carrington/"
     
 t1_map = t1 - timedelta(days=5)
 t2_map = t2

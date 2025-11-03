@@ -1,6 +1,7 @@
 """ Compute the source points of Solar Orbiter
 and Parker Solar Probe during a supposedly conjunction phase"""
 
+import os
 import numpy as np
 from mini_connect_tool import mini_connect_tool as mct
 from mini_connect_tool import load_maps as load
@@ -34,8 +35,8 @@ b_rtn_psp = b_rtn_psp.to_dataframe()
 v_rtn_psp = spz.get_data("amda/psp_spi_Hv", start, stop)
 v_rtn_psp = v_rtn_psp.to_dataframe().bfill()
 
-adapt_dir="../data/adapt_carrington/"
-#sdo_dir="../data/sdo_carrington/"
+adapt_dir=os.path.dirname(__file__)+"../data/adapt_carrington/"
+#sdo_dir=os.path.dirname(__file__)+"../data/sdo_carrington/"
     
 t1_map = t1 - timedelta(days=3) # Extend three days in the past to account for sw propagation
 t2_map = t2
