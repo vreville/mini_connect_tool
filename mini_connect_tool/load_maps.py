@@ -154,7 +154,7 @@ def dl_adapt_carrington_maps(t1, t2, cadence_hours=24):
     names=get_adapt_file_names(list_times)
     list_names=match_names(names,list_times)
 
-    if not os.path.exists(os.path.dirname(__file__)+"../data/adapt_carrington/"):
+    if not os.path.exists(os.path.dirname(__file__)+"/../data/adapt_carrington/"):
         call("mkdir -p {}/../data/adapt_carrington/".format(os.path.dirname(__file__)), shell=True)
 
     print("Downloading ADAPT Carrington maps from NSO/GONG...")
@@ -226,7 +226,7 @@ def dl_sdo_carrington_maps(list_times):
         (list_sdo, list_times) where list_sdo is a list of saved local filenames and
         list_times is the input list_times (returned for convenience).
     """
-    if not os.path.exists(os.path.dirname(__file__)+"../data/sdo_carrington/"):
+    if not os.path.exists(os.path.dirname(__file__)+"/../data/sdo_carrington/"):
         call("mkdir -p {}/../data/sdo_carrington/".format(os.path.dirname(__file__)), shell=True)
 
     list_sdo=[]

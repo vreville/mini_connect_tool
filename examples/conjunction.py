@@ -35,8 +35,8 @@ b_rtn_psp = b_rtn_psp.to_dataframe()
 v_rtn_psp = spz.get_data("amda/psp_spi_Hv", start, stop)
 v_rtn_psp = v_rtn_psp.to_dataframe().bfill()
 
-adapt_dir=os.path.dirname(__file__)+"../data/adapt_carrington/"
-#sdo_dir=os.path.dirname(__file__)+"../data/sdo_carrington/"
+adapt_dir=os.path.dirname(__file__)+"/../data/adapt_carrington/"
+#sdo_dir=os.path.dirname(__file__)+"/../data/sdo_carrington/"
     
 t1_map = t1 - timedelta(days=3) # Extend three days in the past to account for sw propagation
 t2_map = t2
@@ -101,7 +101,7 @@ for ii, dt in enumerate(coords1.dt):
     crlon=np.linspace(0,360,sdoimg.shape[1]+1)
     crlat=np.linspace(-90,90,sdoimg.shape[0]+1)
     ax4.pcolormesh(crlon, crlat, sdoimg[::-1,:], cmap="sdoaia193")
-    ax4.annotate("{}".format(sdo_times[sdoidx].isoformat(timespec="seconds")), (20, 65), color="cyan")
+    ax4.annotate("{}".format(sdo_times[sdoidx].isoformat(timespec="seconds")), (20, 65), color="white") #cyan, any other ideas ? 
     ax4.set_ylim([-80,80])
     
     idx0=max(0,ii+1-10)

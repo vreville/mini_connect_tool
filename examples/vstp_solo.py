@@ -42,7 +42,7 @@ except:
     v_rtn_slo = pd.DataFrame({'Index':hours, 'vr':vr})
     v_rtn_slo = v_rtn_slo.set_index('Index')
 
-adapt_dir=os.path.dirname(__file__)+"../data/adapt_carrington/"
+adapt_dir=os.path.dirname(__file__)+"/../data/adapt_carrington/"
     
 t1_map = t1 - timedelta(days=5)
 t2_map = t2
