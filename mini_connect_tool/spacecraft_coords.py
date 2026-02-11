@@ -66,6 +66,7 @@ Body_dict={0:'SOLAR SYSTEM BARYCENTER',
            899:'NEPTUNE',
            -96:'PARKER SOLAR PROBE',
            -144:'SOLAR ORBITER',
+           -234:'STEREO A',
            -61:'JUNO',
            -121:'BEPI COLOMBO MPO'}
 
@@ -119,6 +120,14 @@ def sunspice_init():
     psp_dir=f"https://psp-gateway.jhuapl.edu/ancillary_data/ephemerides/"
     kernel_urls.append(psp_dir+"spp_nom_20180812_20251001_v041_RO8.bsp")
 
+    # STEREO A
+    sta_dir=f"https://sohowww.nascom.nasa.gov/solarsoft/stereo/gen/data/spice/epm/ahead/"
+    kernel_urls.append(sta_dir+"ahead_2017_061_5295day_predict.epm.bsp")
+
+    # Bepi Colombo
+    bepi_dir=f"https://spiftp.esac.esa.int/data/SPICE/BEPICOLOMBO/kernels/spk/"
+    kernel_urls.append(bepi_dir+"bc_mpo_fcp_00220_20181020_20270407_v01.bsp")
+    
     # Juno
     if(Juno):
         juno_dir=f"https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/"
