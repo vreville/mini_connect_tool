@@ -122,7 +122,7 @@ def match_names(names, list_times):
 
     return matched_names
 
-def dl_adapt_carrington_maps(t1, t2, cadence_hours=24):
+def dl_adapt_carrington_maps(t1, t2, cadence_hours=24, adapt_dir=None):
     """ Download ADAPT Carrington maps from NSO GONG between t1 and t2 with given cadence in hours.
 
     Parameters
@@ -154,12 +154,14 @@ def dl_adapt_carrington_maps(t1, t2, cadence_hours=24):
     names=get_adapt_file_names(list_times)
     list_names=match_names(names,list_times)
 
-    if not os.path.exists(os.path.dirname(__file__)+"/../data/adapt_carrington/"):
-        call("mkdir -p {}/../data/adapt_carrington/".format(os.path.dirname(__file__)), shell=True)
+    if adapt_dir==None:
+        if not os.path.exists(os.path.dirname(__file__)+"/../data/adapt_carrington/"):
+            call("mkdir -p {}/../data/adapt_carrington/".format(os.path.dirname(__file__)), shell=True)
+        adapt_dir="{}/../data/adapt_carrington/".format(os.path.dirname(__file__))
 
     print("Downloading ADAPT Carrington maps from NSO/GONG...")
     for ii,tt in enumerate(list_times):
-        filename="{}/../data/adapt_carrington/{}".format(os.path.dirname(__file__),list_names[ii])
+        filename=adapt_dir+"{}".format(list_names[ii])
         if os.path.exists(filename[:-3]):
             print("File {} already exists, skipping download.".format(filename[:-3]))
             pass
@@ -230,6 +232,7 @@ def dl_sdo_carrington_maps(list_times):
         call("mkdir -p {}/../data/sdo_carrington/".format(os.path.dirname(__file__)), shell=True)
 
     list_sdo=[]
+    list_times_new=[]
     print("Downloading SDO AIA 193 Carrington maps from connect tool API...")
     for tt in list_times:
         url="https://connect-tool.irap.omp.eu/api_creation/PSP/ADAPT/SUNTIME/{:04d}{:02d}{:02d}T{:02d}{:02d}{:02d}/?background=euv193&frame=off&path=on".format(tt.year,
@@ -242,6 +245,7 @@ def dl_sdo_carrington_maps(list_times):
         if os.path.exists(filename):
             print("File {} already exists, skipping download.".format(filename))
             list_sdo.append(filename)
+            list_times_new.append(tt)
             continue
 
         response=requests.get(url)
@@ -253,8 +257,10 @@ def dl_sdo_carrington_maps(list_times):
                 f.write(response.content)
 
             list_sdo.append(filename)
+            list_times_new.append(tt)
+
     print("Download complete.")
-    return list_sdo, list_times
+    return list_sdo, list_times_new
 
 class tmap(object):
     def __init__(self,filename,v1=True,coeff=1,real=0):
