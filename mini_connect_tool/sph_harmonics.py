@@ -134,7 +134,7 @@ class mysph(object):
     def multipolar_expansion(self,alpha,rb=1.0,rsph=1.0):
         """
         Compute multipolar expansion of magnetic field.
-        Correspond to a pfss with rss -> \infty
+        Correspond to a pfss with rss -> infty
         """
 
         br = np.zeros(np.shape(self.theta))
