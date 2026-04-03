@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from pathlib import Path
 from datetime import datetime, timedelta
 from sunpy import coordinates
 from sunpy.data import cache
@@ -7,8 +8,6 @@ import astropy.units as u
 from astropy.time import TimeDelta
 cache._expiry = TimeDelta(100 * u.year)
 from sunpy.coordinates import spice as sspice
-
-Juno=True
 
 def ParkerSpiral(phi,r,Rss=2.5,Vsw=4e2,Period=25.38,acceleration=False):
     """
@@ -117,10 +116,9 @@ def sunspice_init():
     kernel_urls.append(bepi_dir+"bc_mpo_fcp_00220_20181020_20270407_v01.bsp")
 
     # Juno
-    if(Juno):
-        juno_dir=f"https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/"
-        kernel_urls.append(juno_dir+"spk_ref_160226_180221_160226.bsp")
-        kernel_urls.append(juno_dir+"juno_pred_orbit.bsp")
+    juno_dir=f"https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/"
+    kernel_urls.append(juno_dir+"spk_ref_160226_180221_160226.bsp")
+    kernel_urls.append(juno_dir+"juno_pred_orbit.bsp")
 
     # Download files from url into cache
     kernel_files = [cache.download(url) for url in kernel_urls]

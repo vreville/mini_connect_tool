@@ -14,7 +14,8 @@ dependencies = [
 	 "scipy (<1.17)",    
 	 "speasy (>1.5.0)",
          "sunpy (>=6.0.0, <7.0.0)",
-	 "spiceypy"	 
+	 "spiceypy",
+	 "jupyter"
 ]
 
 [project.urls]
