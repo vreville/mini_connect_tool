@@ -36,14 +36,14 @@ def ParkerSpiral(phi,r,Rss=2.5,Vsw=4e2,Period=25.38,acceleration=False):
     """
     Rsunkm=6.957e5
     Om=2*np.pi/(Period*24*60*60)
-    
+
     if acceleration==True:
         phi=phi-(1-r/Rss+np.log(r/Rss))*Rss*Rsunkm*Om/Vsw
     else:
         phi=phi+Om*Rsunkm/Vsw*(r-Rss)
 
     return (phi)%(2*np.pi)
-    
+
 Body_dict={0:'SOLAR SYSTEM BARYCENTER',
            1:'MERCURY BARYCENTER',
            2:'VENUS BARYCENTER',
@@ -74,20 +74,17 @@ def check_kernel():
     """
     Print information about loaded SPICE SPK kernels.
 
-    The function queries the SPK kernel pool and prints the filename,
-    the body IDs covered by each file and their coverage windows.
-    Useful to verify which ephemeris kernels are currently loaded.
     """
     # Check the number of SPK type kernels loaded
     n_spk_ker = sspice.spiceypy.ktotal("SPK")
 
     for k in range(0,n_spk_ker):
         fn=sspice.spiceypy.kdata(k,"SPK")[0]
-        ids = [int(i) for i in sspice.spiceypy.spkobj(fn)]        
+        ids = [int(i) for i in sspice.spiceypy.spkobj(fn)]
         print(fn, ids)
         for bod in ids:
             cov = [sspice.spiceypy.et2utc(t,'ISOC',4) for t in sspice.spiceypy.spkcov(fn, bod)]
-            print(cov, Body_dict[bod])                    
+            print(cov, Body_dict[bod], "NAIF ID = {}".format(bod))
 
 ### Sunpy spiceypy wrapper ###
 
@@ -95,15 +92,6 @@ def sunspice_init():
     """
     Download (into SunPy cache) and initialize a minimal set of SPICE kernels.
 
-    The function prepares a list of commonly used kernel URLs (planetary ephemerides,
-    Solar Orbiter and Parker Solar Probe kernels and optionally Juno) and downloads
-    them via sunpy.data.cache. The downloaded kernel file paths are then passed to
-    sunpy.coordinates.spice.initialize() and the IAU_SUN frame is installed.
-
-    Side effects
-    ------------
-    - Downloads kernel files into the SunPy cache (if not already present).
-    - Calls sspice.initialize() and sspice.install_frame('IAU_SUN').
     """
     # Initialize all kernels useful for planets ephemerides, Solar Orbiter and Parker Solar Probe
 
@@ -127,19 +115,19 @@ def sunspice_init():
     # Bepi Colombo
     bepi_dir=f"https://spiftp.esac.esa.int/data/SPICE/BEPICOLOMBO/kernels/spk/"
     kernel_urls.append(bepi_dir+"bc_mpo_fcp_00220_20181020_20270407_v01.bsp")
-    
+
     # Juno
     if(Juno):
         juno_dir=f"https://naif.jpl.nasa.gov/pub/naif/JUNO/kernels/spk/"
         kernel_urls.append(juno_dir+"spk_ref_160226_180221_160226.bsp")
         kernel_urls.append(juno_dir+"juno_pred_orbit.bsp")
-    
+
     # Download files from url into cache
     kernel_files = [cache.download(url) for url in kernel_urls]
 
     # Manually add kernel (Juno)
     #kernel_files.append(Path.joinpath(cache._cache_dir,"kernel.bsp"))
-    
+
     sspice.initialize(kernel_files)
     sspice.install_frame('IAU_SUN')
 
@@ -178,13 +166,11 @@ class spacecraft_coords(object):
         delta : int, optional
             Sampling cadence in hours (default 1).
 
-        Notes
-        -----
-        After initialization the object has attributes .dt, .xsc, .ysc, .zsc, .rsc, .psc and .tsc.
         """
+
         self.Rsunkm=6.9570e5
         list_of_datetimes=[]
-        
+
         dt_init=t1
         while dt_init < t2:
             list_of_datetimes.append(dt_init)
@@ -193,13 +179,13 @@ class spacecraft_coords(object):
         sc = sspice.get_body(sc, list_of_datetimes, spice_frame="IAU_SUN")
         sc_hci = sc.transform_to(coordinates.HeliocentricInertial())
         sc.radius=sc.distance
-        
+
         self.dt=np.array(list_of_datetimes)
 
         self.xsc=sc_hci.cartesian.x.value
         self.ysc=sc_hci.cartesian.y.value
         self.zsc=sc_hci.cartesian.z.value
-        
+
         self.rsc=sc.radius.value/self.Rsunkm
         self.psc=(sc.lon.value*np.pi/180)%(2*np.pi)
         self.tsc=((90-sc.lat.value)*np.pi/180)%(2*np.pi)
