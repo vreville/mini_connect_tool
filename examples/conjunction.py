@@ -42,7 +42,7 @@ t1_map = t1 - timedelta(days=3) # Extend three days in the past to account for s
 t2_map = t2
 
 #list_files, list_times = load.get_adapt_maps_list(adapt_dir, t1_map, t2_map, forecast=False)
-list_files, list_times = load.dl_adapt_carrington_maps(t1_map, t2_map, cadence_hours=24)
+list_files, list_times = load.dl_adapt_carrington_maps(t1_map, t2_map, cadence_hours=24, adapt_dir=adapt_dir)
 #list_files=[list_files[-1]] # To go faster
 #sdo_files, sdo_times = load.get_sdo_maps_list(sdo_dir, t1_map, t2_map)
 sdo_files, sdo_times = load.dl_sdo_carrington_maps(list_times)

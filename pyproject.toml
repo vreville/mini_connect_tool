@@ -16,7 +16,7 @@ dependencies = [
          "sunpy (>=6.0.0, <7.0.0)",
 	 "spiceypy",
 	 "jupyter",
-	 "pyvista"
+	 "pyvista[all]"
 ]
 
 [project.urls]
