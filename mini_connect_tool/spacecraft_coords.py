@@ -83,7 +83,7 @@ def check_kernel():
         print(fn, ids)
         for bod in ids:
             cov = [sspice.spiceypy.et2utc(t,'ISOC',4) for t in sspice.spiceypy.spkcov(fn, bod)]
-            print(cov, Body_dict[bod], "NAIF ID = {}".format(bod))
+            print(cov, Body_dict[bod], ", NAIF ID = {}".format(bod))
 
 ### Sunpy spiceypy wrapper ###
 
