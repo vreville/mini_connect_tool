@@ -87,7 +87,7 @@ def build_mag_fields(adapt_dir,list_files, r0=1, rss=2.5, lmax=15, real=0, v1=Fa
 
     return [maps_time, tm.theta, tm.phi, rad, brr, btt, bpp]
 
-def connect(maps_time, vr, rad, theta, phi, brr, btt, bpp, t1, t2, sc='Solar Orbiter'):
+def connect(maps_time, vr, rad, theta, phi, brr, btt, bpp, t1, t2, sc='Solar Orbiter', lag="SW"):
     """
     Connect spacecraft sampling times to photospheric maps and trace fieldlines.
 
@@ -133,7 +133,10 @@ def connect(maps_time, vr, rad, theta, phi, brr, btt, bpp, t1, t2, sc='Solar Orb
 
         ### Look for the closest map connected ###
         idx=np.argmin(np.abs(idx_vr-time.mktime(dd.timetuple())))
-        Vsw=vr.values[idx]
+        if lag=="SW":
+            Vsw=vr.values[idx]
+        else:
+            Vsw=2.998e5 # Speed of light in km/s
         vsws.append(Vsw)
 
         travel_time=coords.rsc[ii]*6.957e5/Vsw # Constant wind speed
