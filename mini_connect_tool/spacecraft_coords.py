@@ -123,7 +123,7 @@ def sunspice_init():
     # Download files from url into cache
     kernel_files = [cache.download(url) for url in kernel_urls]
 
-    # Manually add kernel (Juno)
+    # Manually add kernel
     #kernel_files.append(Path.joinpath(cache._cache_dir,"kernel.bsp"))
     #kernel_files = [Path.joinpath(cache._cache_dir, kk) for kk in ["de430.bsp", "naif0012.tls", "pck00010.tpc", "solo_ANC_soc-orbit-stp_20200210-20301120_280_V1_00288_V01.bsp", "spp_nom_20180812_20251001_v041_RO8.bsp", "ahead_2017_061_5295day_predict.epm.bsp", "bc_mpo_fcp_00220_20181020_20270407_v01.bsp", "spk_ref_160226_180221_160226.bsp", "juno_pred_orbit.bsp"]]
     
