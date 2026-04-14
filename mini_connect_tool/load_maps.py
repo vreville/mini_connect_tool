@@ -1,10 +1,13 @@
 import os
 import numpy as np
+from pathlib import Path
 from subprocess import call
 from datetime import datetime, timedelta
 from astropy.io import fits
 from copy import deepcopy
 import requests
+import gzip
+import shutil
 
 def find_outlist(dir,dtype="fts"):
     """
@@ -155,15 +158,18 @@ def dl_adapt_carrington_maps(t1, t2, cadence_hours=24, adapt_dir=None):
     list_names=match_names(names,list_times)
 
     if adapt_dir==None:
-        if not os.path.exists(os.path.dirname(__file__)+"/../data/adapt_carrington/"):
-            call("mkdir -p {}/../data/adapt_carrington/".format(os.path.dirname(__file__)), shell=True)
-        adapt_dir="{}/../data/adapt_carrington/".format(os.path.dirname(__file__))
+        #adapt_dir="{}/../data/adapt_carrington/".format(os.path.dirname(__file__))
+        adapt_dir = Path(__file__).resolve().parent.parent / "data" / "adapt_carrington"
+        if not os.path.exists(adapt_dir):
+            Path(adapt_dir).mkdir(parents=True, exist_ok=True)
+            #call("mkdir -p {}/../data/adapt_carrington/".format(os.path.dirname(__file__)), shell=True)
 
     print("Downloading ADAPT Carrington maps from NSO/GONG...")
     for ii,tt in enumerate(list_times):
-        filename=adapt_dir+"{}".format(list_names[ii])
-        if os.path.exists(filename[:-3]):
-            print("File {} already exists, skipping download.".format(filename[:-3]))
+        filename=adapt_dir / "{}".format(list_names[ii])
+        unzipped=Path(filename).with_suffix("")
+        if os.path.exists(unzipped):
+            print("File {} already exists, skipping download.".format(unzipped))
             pass
         else:
             url="https://gong.nso.edu/adapt/maps/gong/{:04d}/{}".format(tt.year, list_names[ii])
@@ -173,11 +179,14 @@ def dl_adapt_carrington_maps(t1, t2, cadence_hours=24, adapt_dir=None):
                 with open(filename, "wb") as f:
                     f.write(response.content)
 
-                call("gzip -d {}".format(filename), shell=True)
-        list_files.append(list_names[ii][:-3])
+                with gzip.open(filename, "rb") as f_in:
+                    with open(unzipped, "wb") as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                #call("gzip -d {}".format(filename), shell=True)
+        list_files.append(unzipped)
 
     print("Download complete.")
-    return list_files, list_times
+    return list_files, list_times, adapt_dir
 
 def get_sdo_maps_list(sdo_dir, t1, t2):
     """
@@ -228,8 +237,11 @@ def dl_sdo_carrington_maps(list_times):
         (list_sdo, list_times) where list_sdo is a list of saved local filenames and
         list_times is the input list_times (returned for convenience).
     """
-    if not os.path.exists(os.path.dirname(__file__)+"/../data/sdo_carrington/"):
-        call("mkdir -p {}/../data/sdo_carrington/".format(os.path.dirname(__file__)), shell=True)
+
+    carr_dir = Path(__file__).resolve().parent.parent / "data" / "sdo_carrington"
+    if not os.path.exists(carr_dir):
+        Path(carr_dir).mkdir(parents=True, exist_ok=True)
+        #call("mkdir -p {}/../data/sdo_carrington/".format(os.path.dirname(__file__)), shell=True)
 
     list_sdo=[]
     list_times_new=[]
@@ -241,7 +253,7 @@ def dl_sdo_carrington_maps(list_times):
                                                                                                                                                                 tt.hour,
                                                                                                                                                                 tt.minute,
                                                                                                                                                                 tt.second)
-        filename="{}/../data/sdo_carrington/AIA193_{}.png".format(os.path.dirname(__file__),tt.isoformat())
+        filename=carr_dir / "AIA193_{}.png".format(tt.isoformat())
         if os.path.exists(filename):
             print("File {} already exists, skipping download.".format(filename))
             list_sdo.append(filename)
@@ -322,7 +334,7 @@ class tmap(object):
         else:
             f=fits.open(filename)
 
-            tmp=((filename.split("/")[-1]).split("_"))[2]
+            tmp=((str(filename).split("/")[-1]).split("_"))[2]
             self.time=datetime(int(tmp[0:4]),int(tmp[4:6]),int(tmp[6:8]),int(tmp[8:10]),int(tmp[10:12]),0)
 
             # Get the data

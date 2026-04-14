@@ -16,8 +16,8 @@ from astropy.io import fits
 import sunpy.visualization.colormaps
 
 # Times                                                                                                                        
-start = "2022-02-23T00:00:00"
-stop  = "2022-02-28T23:59:59"
+start = "2026-04-13T00:00:00"
+stop  = "2026-04-15T23:59:59"
 
 t1=datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
 t2=datetime.strptime(stop,  "%Y-%m-%dT%H:%M:%S")
@@ -31,12 +31,11 @@ try:
 except:
     bdata=False
 
-#try:
-
-v_rtn_slo = spz.get_data("amda/pas_momgr1_v_rtn", start, stop)
-v_rtn_slo = v_rtn_slo.to_dataframe().ffill()
-if len(v_rtn_slo)==0:
-#except:
+try:
+    v_rtn_slo = spz.get_data("amda/pas_momgr1_v_rtn", start, stop)
+    v_rtn_slo = v_rtn_slo.to_dataframe().ffill()
+#if len(v_rtn_slo)==0:
+except:
     dummy_speed=400
     hours=pd.date_range(t1,t2, freq="h")
     vr=np.ones(len(hours))+2*(np.random.rand(len(hours))-0.5)*0.1
@@ -44,13 +43,13 @@ if len(v_rtn_slo)==0:
     v_rtn_slo = pd.DataFrame({'Index':hours, 'vr':vr})
     v_rtn_slo = v_rtn_slo.set_index('Index')
 
-#adapt_dir=os.path.dirname(__file__)+"/../data/adapt_carrington/"
-adapt_dir=os.getenv("DATA_PATH")+"/../SolarMagnetograms/ADAPT_CARR/{}/".format(t1.year)
+adapt_dir=None
+#adapt_dir=os.getenv("DATA_PATH")+"/../SolarMagnetograms/ADAPT_CARR/{}/".format(t1.year)
 
 t1_map = t1 - timedelta(days=5)
 t2_map = t2
 
-map_files, map_times = load.dl_adapt_carrington_maps(t1_map, t2_map, cadence_hours=24, adapt_dir=adapt_dir)
+map_files, map_times, adapt_dir = load.dl_adapt_carrington_maps(t1_map, t2_map, cadence_hours=24, adapt_dir=adapt_dir)
 #maps_files=[maps_files[-1]] # To go faster
 sdo_files, sdo_times = load.dl_sdo_carrington_maps(map_times)
 

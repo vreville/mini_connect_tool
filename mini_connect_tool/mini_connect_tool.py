@@ -42,14 +42,14 @@ def build_mag_fields(adapt_dir,list_files, r0=1, rss=2.5, lmax=15, real=0, v1=Fa
           containing the PFSS mag field radial, colatitudinal and longitudinal components.
     """
     list_maps=[]
-    tm=mu.tmap(adapt_dir+list_files[0],v1=v1,coeff=coeff,real=real)
+    tm=mu.tmap(adapt_dir / list_files[0],v1=v1,coeff=coeff,real=real)
     theta,phi=np.meshgrid(tm.theta,tm.phi,indexing='ij')
     SphHarm=zdi.mysph(lmax,theta,phi)
     tm.dmp_alm(SphHarm)
     list_maps.append(tm)
 
     for ll in list_files[1:]:
-        tt=mu.tmap(adapt_dir+ll,v1=v1,coeff=coeff,real=real)
+        tt=mu.tmap(adapt_dir / ll,v1=v1,coeff=coeff,real=real)
         tt.dmp_alm(SphHarm)
         list_maps.append(tt)
 
