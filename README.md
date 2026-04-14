@@ -11,7 +11,7 @@ Developped at the Institut de Recherche en Astrophysique et Planétologie (IRAP,
 ```bash
 git clone https://github.com/vreville/mini_connect_tool
 cd mini_connect_tool
-pip install .
+pip install -e .
 ```
 
 ## Developers
