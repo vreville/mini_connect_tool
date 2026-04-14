@@ -253,7 +253,7 @@ def dl_sdo_carrington_maps(list_times):
                                                                                                                                                                 tt.hour,
                                                                                                                                                                 tt.minute,
                                                                                                                                                                 tt.second)
-        filename=carr_dir / "AIA193_{}.png".format(tt.isoformat())
+        filename=carr_dir / "AIA193_{}.png".format(tt.strftime("%Y-%m-%dT%H-%M-%S"))
         if os.path.exists(filename):
             print("File {} already exists, skipping download.".format(filename))
             list_sdo.append(filename)
