@@ -1,11 +1,8 @@
 import numpy as np
-import matplotlib.ticker
-import matplotlib.pyplot as plt
 from packaging.version import Version
 import scipy
 if Version(scipy.__version__) < Version('1.15'): from scipy.special import sph_harm
 else: from scipy.special import sph_harm_y as sph_harm
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 from timeit import default_timer as timer
 from tqdm import tqdm
 
